@@ -13,20 +13,20 @@ class InvestmentController extends Controller
      public function index()
     {
         $Investment=Investment::all();
-        return view('Investments.index',compact('Investment'));
+        return view('investments.index',compact('Investment'));
     }
 
     public function show($id)
     {        
         $Investment = Investment::findOrFail($id);
-        return view('Investments.show',compact('Investment'));
+        return view('investments.show',compact('Investment'));
     }
 
 
     public function create()
     {
         $customers = Customer::lists('name','id');
-        return view('Investments.create', compact('customers'));
+        return view('investments.create', compact('customers'));
     }
 
     /**
