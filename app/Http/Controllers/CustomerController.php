@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Customer;
+use App\Stock;
+use App\Investment;
+use App\mutualfunds;
 use Auth;
 
 class CustomerController extends Controller
@@ -85,13 +88,34 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
+        //Deleting all stocks of that customer.
+        $stocks = Stock::where('customer_id', $id)->lists('id');
+
+        foreach ($stocks as $stock) {
+                Stock::find($stock)->delete();
+            }
+
+
+        //Deleting all investments of that customer.
+        $investments = Investment::where('customer_id', $id)->lists('id');
+
+        foreach ($investments as $investment) {
+                Investment::find($investment)->delete();
+                }
+
+        //Deleting all funds of that customer.
+        $mutualfunds = mutualfunds::where('customer_id', $id)->lists('id');
+
+        foreach ($mutualfunds as $mutualfund) {
+                mutualfunds::find($mutualfund)->delete();
+                }
+
         Customer::find($id)->delete();
         return redirect('customers');
     }
 
     public function stringify($id)
     {
-       // $customer=Customer::where('id', $id)->select('customer_id','name','address','city','state','zip','home_phone','cell_phone')->first();
         $customer = Customer::where('cust_number', $id)->select('cust_number','name','address','city','state','zip','home_phone','cell_phone')->first();
 
         $customer = $customer->toArray();

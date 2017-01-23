@@ -35,7 +35,8 @@
                 <td><a href="{{route('customers.edit',$customer->id)}}" class="btn btn-warning">Update</a></td>
                 <td>
                     {!! Form::open(['method' => 'DELETE', 'route'=>['customers.destroy', $customer->id]]) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+        <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this Customer? This will also delete associated stocks, investments and all mutual funds.')">
+
                     {!! Form::close() !!}
                 </td>
             </tr>

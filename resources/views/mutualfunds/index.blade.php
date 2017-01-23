@@ -29,7 +29,8 @@
                 <td><a href="{{route('mutualfunds.edit',$mutualfunds->id)}}" class="btn btn-warning">Update</a></td>
                 <td>
                     {!! Form::open(['method' => 'DELETE', 'route'=>['mutualfunds.destroy', $mutualfunds->id]]) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+        <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this Mutual fund?')">
+
                     {!! Form::close() !!}
                 </td>
             </tr>
