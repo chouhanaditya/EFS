@@ -7,14 +7,21 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\mutualfunds;
 use App\Customer;
+use Auth;
+
 
 class MutualfundController extends Controller
 {
     public function index()
     {
-        //
+        
         $mutualfunds=mutualfunds::all();
+
+        if (Auth::check())
         return view('mutualfunds.index',compact('mutualfunds'));
+        else
+        return view('/auth/login');
+
     }
 
     public function show($id)

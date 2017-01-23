@@ -6,13 +6,24 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Customer;
+use Auth;
 
 class CustomerController extends Controller
 {
-    public function index()
+	
+	public function __construct()
     {
+        $this->middleware('auth');
+    }
+	
+    public function index()
+	{
         $customers=Customer::all();
+		if (Auth::check())
         return view('customers.index',compact('customers'));
+        else
+		return view('/auth/login');
+				
     }
 
     public function show($id)

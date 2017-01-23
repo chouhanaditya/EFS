@@ -9,7 +9,7 @@
 				</div>
 
                 <div class="panel-body">
-				<marquee>Welcome, you are logged in! </marquee>
+				Welcome, you are logged in!
                 </div>
 				<div class="container">
     

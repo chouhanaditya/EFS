@@ -7,13 +7,19 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Investment;
 use App\Customer;
+use Auth;
+
 
 class InvestmentController extends Controller
 {
      public function index()
     {
         $Investment=Investment::all();
+
+        if (Auth::check())
         return view('investments.index',compact('Investment'));
+        else
+        return view('/auth/login');
     }
 
     public function show($id)

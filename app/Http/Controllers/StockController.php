@@ -7,13 +7,19 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Stock;
 use App\Customer;
+use Auth;
+
 
 class StockController extends Controller
 {
     public function index()
     {
         $stocks=Stock::all();
+        
+        if (Auth::check())
         return view('stocks.index',compact('stocks'));
+        else
+        return view('/auth/login');
     }
 
     public function show($id)
