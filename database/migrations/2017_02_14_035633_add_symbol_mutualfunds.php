@@ -13,7 +13,7 @@ class AddSymbolMutualfunds extends Migration
     public function up()
     {
         Schema::table('mutualfunds', function($table) {
-        $table->string('symbol');
+        $table->string('symbol')->nullable;
     });
     }
 
