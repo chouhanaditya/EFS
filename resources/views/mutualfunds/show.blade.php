@@ -9,6 +9,10 @@
                 <td>Mutual Fund Name</td>
                 <td><?php echo ($mutualfunds['name']); ?></td>
             </tr>
+             <tr>
+                <td>Symbol of Mutual Funds</td>
+                <td><?php echo ($mutualfunds['symbol']); ?></td>
+            </tr>
             <tr>
                 <td>Number of Mutual Funds</td>
                 <td><?php echo ($mutualfunds['units']); ?></td>

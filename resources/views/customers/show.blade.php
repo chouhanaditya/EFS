@@ -50,7 +50,8 @@
     </div>
 	
 	<?php
-    $stotal = 0;
+    $stotal_Initial = 0;
+    $stotal_Current = 0;
     ?>
 	
 	<div class="container">	
@@ -63,9 +64,11 @@
                 <th>Symbol </th>
                 <th>Stock Name</th>
                 <th>No. of Shares</th>
-                <th>Purchase Price ($)</th>
+                <th>Purchase Price</th>
                 <th>Purchase Date</th>
-				<th>Stock Total Value ($)</th>
+				<th>Original Value</th>
+                <th>Current Price</th>
+                <th>Current Value</th>
                </tr>
             </thead>
             <tbody>
@@ -74,17 +77,38 @@
                         <td>{{ $stock->symbol }}</td>
                         <td>{{ $stock->name }}</td>
                         <td>{{ $stock->shares }}</td>
-                        <td>{{ $stock->purchase_price }}</td>
+                        <td><?php echo '$'. $stock->purchase_price ?></td>
                         <td>{{ $stock->purchased }}</td>
                         <td> <?php echo '$'. $stock['shares']*$stock['purchase_price'];
-                            $stotal = $stotal + $stock['shares'] * $stock['purchase_price']?>
+                            $stotal_Initial = $stotal_Initial + $stock['shares'] * $stock['purchase_price']?>
+                        </td>
+                       <?php
+                        $URL="http://finance.google.com/finance/info?client=ig&q=" . $stock->symbol;
+                        $File = fopen("$URL", "r");
+                        $var = "";
+                        do {
+                        $data = fread($File, 500);
+                        $var .= $data;
+                        } while (strlen($data) != 0);
+
+                        $json = str_replace("\n", "", $var);
+                        $data = substr($json, 4, strlen($json) - 5);
+                        $json_output = json_decode($data, true);
+                        $current_value = "\n" . $json_output['l'];
+                        ?>
+                        <td><?php echo '$', $current_value ?></td>
+                        <td> <?php echo '$'. $stock['shares']*$current_value;
+                            $stotal_Current = $stotal_Current + $stock['shares'] * $current_value ?>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 		<h5>
-            <?php echo 'Total of Stock Portfolio : $' , number_format($stotal,2) ; ?>
+            <?php echo 'Initial Total of Stock Portfolio : $' , number_format($stotal_Initial,2) ; ?>
+        </h5>
+        <h5>
+            <?php echo 'Current Total of Stock Portfolio : $' , number_format($stotal_Current,2) ; ?>
         </h5>
     </div>
 		
@@ -128,15 +152,16 @@
         </table>
 		
 		<h5>
-            <?php echo 'Total of Initial Investment Portfolio : $' ,number_format( $itotal_initial,2); ?>
+            <?php echo 'Initial Total of Investment Portfolio : $' ,number_format( $itotal_initial,2); ?>
             <br>
 			<br>
-            <?php echo 'Total of Current Investment Portfolio : $' ,number_format( $itotal_current,2); ?>
+            <?php echo 'Current Total of Investment Portfolio : $' ,number_format( $itotal_current,2); ?>
         </h5>
     </div>
 	
 	<?php
-    $mtotal = 0;
+    $mInitial_Total = 0;
+    $mCurrent_Total = 0;
 	$initialportfolio=0;
 	$currentportfolio=0;
 	
@@ -149,31 +174,55 @@
         <table class="table table-striped table-bordered table-hover">
             <thead>
             <tr class="bg-info">
+                <th>Mutual Fund Symbol</th>            
                 <th>Mutual Fund Name</th>
                 <th>Number of units</th>
-                <th>Purchase Price ($)</th>
+                <th>Purchase Price</th>
                 <th>Purchase Date</th>
-				<th>Mutual Funds Value ($)</th>
+				<th>Original Value </th>
+                <th>Current Price</th>
+                <th>Current Value</th>
                </tr>
             </thead>
             <tbody>
                 @foreach($customer->mutualfunds as $mutualfunds)
                     <tr>
+                        <td>{{ $mutualfunds->symbol }}</td>
                         <td>{{ $mutualfunds->name }}</td>
                         <td>{{ $mutualfunds->units }}</td>
-                        <td>{{ $mutualfunds->purchase_price }}</td>
+                        <td><?php echo '$'. $mutualfunds->purchase_price ?></td>
                         <td>{{ $mutualfunds->purchased }}</td>
                         <td> <?php echo '$'. $mutualfunds['units']*$mutualfunds['purchase_price'];
-                            $mtotal = $mtotal + $mutualfunds['units'] * $mutualfunds['purchase_price']?>
+                            $mInitial_Total = $mInitial_Total + $mutualfunds['units'] * $mutualfunds['purchase_price']?>
+                        </td>
+                        <?php
+                        $URL="http://finance.google.com/finance/info?client=ig&q=" . $mutualfunds->symbol;
+                        $File = fopen("$URL", "r");
+                        $var = "";
+                        do {
+                        $data = fread($File, 500);
+                        $var .= $data;
+                        } while (strlen($data) != 0);
+
+                        $json = str_replace("\n", "", $var);
+                        $data = substr($json, 4, strlen($json) - 5);
+                        $json_output = json_decode($data, true);
+                        $current_value = "\n" . $json_output['l'];
+                        ?>
+                        <td><?php echo '$', $current_value ?></td>
+                        <td> <?php echo '$'. $mutualfunds['units']*$current_value;
+                            $mCurrent_Total = $mCurrent_Total + $mutualfunds['units'] * $current_value ?>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 		<h5>
-            <?php echo 'Total of Mutual funds Portfolio : $' , number_format($mtotal,2) ; ?>
+            <?php echo 'Initial Total of Mutual funds Portfolio : $' , number_format($mInitial_Total,2) ; ?>
         </h5>
-    
+        <h5>
+            <?php echo 'Current Total of Mutual funds Portfolio : $' , number_format($mCurrent_Total,2) ; ?>
+        </h5>
 	<br>
 	<br>
 	<div class="table table-striped table-bordered table-hover">
@@ -181,8 +230,8 @@
      <h4> <?php echo ($customer['name']); ?> - Portfolio </h4>
 	 	
 		<br>
-		<?php $initialportfolio = $itotal_initial+$stotal+$mtotal;
-        $currentportfolio = $itotal_current+$stotal+$mtotal;
+		<?php $initialportfolio = $itotal_initial+$stotal_Initial+$mInitial_Total;
+        $currentportfolio = $itotal_current+$stotal_Current+$mCurrent_Total;
         ?>
 		
 		

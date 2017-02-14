@@ -13,4 +13,5 @@ Route::resource('mutualfunds','MutualfundController');
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+Route::get('customers/{id}/stringify', 'CustomerController@stringify');
  

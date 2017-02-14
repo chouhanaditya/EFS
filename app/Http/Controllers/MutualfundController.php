@@ -51,6 +51,7 @@ class MutualfundController extends Controller
         'name' => 'required',
         'units' => 'required',
 		'purchase_price' => 'required',
+        'symbol' => 'required',
 		'purchased' => 'required',        
     ]);
 	
