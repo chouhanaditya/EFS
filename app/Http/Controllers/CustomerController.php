@@ -14,10 +14,10 @@ use Auth;
 class CustomerController extends Controller
 {
 	
-	public function __construct()
-    {
-        $this->middleware('auth');
-    }
+	// public function __construct()
+ //    {
+ //        $this->middleware('auth');
+ //    }
 	
     public function index()
 	{
@@ -26,7 +26,7 @@ class CustomerController extends Controller
         return view('customers.index',compact('customers'));
         else
 		return view('/auth/login');
-				
+      			
     }
 
     public function show($id)
